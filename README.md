@@ -1,126 +1,75 @@
-Async React
+React children
 Agenda
-making a service
-using service
-refetch after update
-Loading
-Making a service
-Make a separate services directory that will contain all API services. This will keep our components simple, while making API calls reusable.
+children property
+Error Boundaries
+Resources
+Composition vs Inheritence
+Error Boundaries
+Children Property
+A component, like vanilla HTML, can have children.
 
-// src/services/futuramaApi.js
+<div id="parent">
+  <p class="child"></p>
+  <p class="child"></p>
+  <p class="child"></p>
+</div>
+<Parent>
+  <p>Every</p>
+  <p>Thing</p>
+  <p>Is</p>
+  <p>Fine</p>
+</Parent>
+These children are passed to a component via the children prop. (NOTE: children is a PropTypes.node).
 
-export const getQuotes = (count = 10) => {
-  return fetch('https://futuramaapi.herokuapp.com/api/quotes')
-    .then(res => ([res.ok, res.json()]))
-    .then(([ok, json]) => {
-      if(!ok) throw 'Unable to fetch quote'
-
-      return json
-    });
-}
-Using a service
-// src/containers/quotes/TopQuotes.js
-import React, { PureComponent } from 'react';
-import Quotes from '../../components/Quotes';
-import { getQuotes } from '../../services/futuramaApi.js';
-
-export default class TopQuotes extends PureComponent {
-  state = {
-    quotes: []
-  }
-
-  componentDidMount() {
-    getQuotes()
-      .then(quotes => this.setState({ quotes }));
-  }
-
-  render() {
-    const { quotes } = this.state;
-    return <Quotes quotes={quotes} />;
-  }
-}
-Refetch after update
-// src/components/quotes/TopQuotes.js
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Quotes from '../../components/quotes/Quotes';
-import { getQuotes } from '../../services/futuramaApi.js';
 
-export default class TopQuotes extends PureComponent {
-  static propTypes = {
-    count: PropTypes.number
-  }
-
-  static defaultProps = {
-    count: 10
-  }
-
-  state = {
-    quotes: []
-  }
-
-  fetchQuotes = () => {
-    getQuotes(this.props.count)
-      .then(quotes => this.setState({ quotes }));
-  }
-
-  componentDidMount() {
-    this.fetchQuotes();
-  }
-
-  componentDidUpdate(prevProps) {
-    if(prevProps.count  !== this.props.count) {
-      this.fetchQuotes();
-    }
-  }
-
-  render() {
-    const { quotes } = this.state;
-    return <Quotes quotes={quotes} />;
-  }
+function Parent({ children }) {
+  return (
+    <>
+      {children}
+    </>
+  );
 }
-Loading
-// src/components/quotes/TopQuotes.js
-import React, { PureComponent } from 'react';
+
+Parent.propTypes = {
+  children: PropTypes.node
+};
+
+export default Parent;
+Error Boundaries
+Error boundaries are components that act like a catch. When an error occurs the error boundary can catch the error and present an error message. If there is no error an error boundary will render it's children.
+
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Quotes from '../../components/quotes/Quotes';
-import Loading from '../../components/Loading'
-import { getQuotes } from '../../services/futuramaApi.js';
 
-export default class TopQuotes extends PureComponent {
+export default class ErrorBoundary extends Component {
   static propTypes = {
-    count: PropTypes.number
-  }
-
-  static defaultProps = {
-    count: 10
+    children: PropTypes.node
   }
 
   state = {
-    quotes: [],
-    loading: true
+    error: false
   }
 
-  fetchQuotes = () => {
-    this.setState({ loading: true })
-    getQuotes(this.props.count)
-      .then(quotes => this.setState({ quotes, loading: false }));
+  static getDerivedStateFromError(error) {
+    return { error: true };
   }
 
-  componentDidMount() {
-    this.fetchQuotes();
-  }
-
-  componentDidUpdate(prevProps) {
-    if(prevProps.count  !== this.props.count) {
-      this.fetchQuotes();
-    }
+  componentDidCatch(error) {
+    console.error(error);
   }
 
   render() {
-    const { quotes, loading } = this.state;
-    if(loading) return <Loading />
+    if(this.state.error) {
+      return <h3>Error!</h3>
+    }
 
-    return <Quotes quotes={quotes} />;
+    return this.props.children
   }
 }
+Error boundaries include at least one of:
+
+Method	Use
+static getDerivedStateFromError(error)	Used to update state
+componentDidCatch

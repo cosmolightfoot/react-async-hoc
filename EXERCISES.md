@@ -1,38 +1,21 @@
-React Async Exercises
-Create an application to display futurama quotes
-Demo Simple Futurama Quotes
+React Children Exercises
+Create and render a Sidebar component
+Demo Simple Sidebar
 
-create a Quote presentational component
-display character, quote, and image
-create a Quotes presentational component
-create a TopQuotes container component
-TopQuotes take a count property
-fetch count quotes from the futurama api and display them
-create an App component that uses your TopQuotes component
+create a Sidebar component
+a sidebar has children that render in a <nav> element
+create an App component that uses your Sidebar component
 create an index.js that renders your App component
-BONUS
-create a CharacterQuotes container component
-CharacterQuotes take a count and character
-display quotes by only that character
-add a select to select characters to get quotes for
-Create an application to display Rick and Morty Characters
-Demo Simple Rick And Morty
+Create and render a error thing
+Demo Simple Error
 
-create a Character presentational component
-display name, status, species, and image
-create a Characters presentational component
-create an AllCharacters container component
-fetch characters from https://rickandmortyapi.com/api/character/
-create an App component that uses your AllCharacters component
+create an ErrorBoundary component
+display <h3>Error!</h3> if there is an error
+console.error the error
+otherwise render children components
+create a Bad component that throws an error
+create a Good component that renders <h1>Good</h1>
+create an App component that uses your components
+what happens if you wrap ErrorBoundary around Bad?
+what happens if you don't?
 create an index.js that renders your App component
-Create an application to display Rick and Morty Characters
-Demo Paged Rick And Morty
-
-Branch off of your simple-rick-and-morty branch
-update AllCharacters
-add page to state and create buttons to increment and decrement page
-use page to page through the rick and morty api
-make sure you can't go passed the last page
-make sure you can't go before the first page
-Bonus
-make a Paging component
