@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Error Boundary tests renders the app component 1`] = `
+<Fragment>
+  <ErrorBoundaries>
+    <Bad />
+  </ErrorBoundaries>
+  <Good />
+</Fragment>
+`;
